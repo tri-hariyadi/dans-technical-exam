@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# Technical Exam
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -11,8 +11,7 @@ In the project directory, you can run:
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+The page will reload when you make changes.
 
 ## Login To The Web App
 use username = 'user' and password = '123' for login to the app
