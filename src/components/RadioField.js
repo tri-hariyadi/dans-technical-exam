@@ -14,7 +14,7 @@ const RadioField = ({
     return (
       <div
         key={`radio-${idx}`}
-        className='custom-control-inline custom-control mb-2'>
+        className='custom-control-inline custom-control mb-2 ms-3'>
         <Field
           name={name}
           component='input'
@@ -23,15 +23,15 @@ const RadioField = ({
           className='option-input radio'
           id={`${name}-${idx}`}
         />
-        <label htmlFor={`${name}-${idx}`}>
+        <label className='ms-2' htmlFor={`${name}-${idx}`}>
           {value.label}
         </label>
       </div>
     );
   };
   return (
-    <div style={style}>
-      {label && (<div className={classNames('mb-2')}>{label}</div>)}
+    <div style={style} className='d-flex align-items-center'>
+      {label && (<div className={classNames('mb-2 ms-1')}>{label}</div>)}
       {options.map(renderComponent)}
     </div>
   )

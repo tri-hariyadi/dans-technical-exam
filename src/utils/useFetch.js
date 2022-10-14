@@ -7,7 +7,7 @@ function useFetch(query, page) {
   const [list, setList] = useState([]);
 
   const sendByPage = useCallback(async () => {
-    if (!query) {
+    if (!query && page > 0) {
       try {
         setError(false);
         setLoading(true);

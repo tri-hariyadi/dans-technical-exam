@@ -6,7 +6,7 @@ import useFetch from '../utils/useFetch';
 
 const Home = () => {
   const [query, setQuery] = useState(false);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const { loading, error, list } = useFetch(query, page);
   const loader = useRef(null);
 
@@ -16,6 +16,10 @@ const Home = () => {
       location: values.location || '',
       option: values.option === 'fulltime' ? true : false
     })
+    if (!values.desc && !values.location && !values.option) {
+      setPage(1);
+      setQuery(false);
+    }
   };
 
   const handleObserver = useCallback((entries) => {
@@ -59,15 +63,13 @@ const Home = () => {
         }
       </div>
       {loading &&
-        <div>
+        <div className='mb-5'>
           <Spinner color='secondary' size='sm' className='me-2' />
           <span className='mt-n1'>Loading...</span>
         </div>
       }
-      {error && <p>Error!</p>}
+      {error && <p className='mb-5'>Error!</p>}
       <div ref={loader} />
-      <br />
-      <br />
     </div>
   )
 }
