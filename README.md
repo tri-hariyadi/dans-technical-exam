@@ -9,7 +9,7 @@ In the project directory, you can run:
 ### `npm start`
 
 Runs the app in the development mode.\
-Open [httt://localhost:3000](http://localhost:3000) to view it in your browser.
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.
 
@@ -18,5 +18,5 @@ use username = 'user' and password = '123' for login to the app
 
 ## Login To The Web App With Google Account
 
-Login with google only work for [httt://localhost:3000](http://localhost:3000) don't use IP Address
-because authorized javascript origins only for [httt://localhost:3000](http://localhost:3000)
+Login with google only work for [http://localhost:3000](http://localhost:3000) don't use IP Address
+because authorized javascript origins only for [http://localhost:3000](http://localhost:3000)
