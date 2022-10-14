@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Row, Col, Spinner } from 'reactstrap'
 import CardItem from '../components/CardItem';
+import Header from '../parts/Header';
 import SearchForm from '../parts/SearchForm';
 import useFetch from '../utils/useFetch';
 
@@ -40,7 +41,9 @@ const Home = () => {
   }, [handleObserver]);
 
   return (
-    <div className='w-100 container'>
+    <div>
+      <Header />
+      <div className='w-100 container main'>
       <h2 className='mb-4 mt-3'>Search Job</h2>
       <SearchForm onSubmit={onSubmit} />
       <div className='mt-4'>
@@ -70,6 +73,7 @@ const Home = () => {
       }
       {error && <p className='mb-5'>Error!</p>}
       <div ref={loader} />
+    </div>
     </div>
   )
 }

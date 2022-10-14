@@ -5,8 +5,8 @@ const AuthContext = React.createContext()
 const AuthProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
 
-  const login = () => {
-    setIsAuth(true);
+  const login = (data) => {
+    setIsAuth(data);
   }
 
   const logout = () =>  {

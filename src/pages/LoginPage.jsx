@@ -1,13 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form } from 'react-final-form';
 import { Redirect, useLocation } from 'react-router-dom';
-import { Row, Col, Spinner, Container, Card, CardGroup, CardBody } from 'reactstrap'
+import { Row, Col, Spinner, Container, Card, CardGroup, CardBody } from 'reactstrap';
+import GoogleLogin from 'react-google-login';
+import { gapi } from 'gapi-script';
 import { AuthConsumer } from '../Auth/AuthContext';
 import TextField from '../components/TextField';
 
 const LoginPage = () => {
   const [redirectToReferrer, setRedirectToReferrer] = useState(false);
   const { state }  = useLocation();
+  const clientId = '253456688828-p2hqlknlqd08vhei2r1t1o9gr7c8g67m.apps.googleusercontent.com';
+
+  useEffect(() => {
+    const initClient = () => {
+          gapi.client.init({
+          clientId: clientId,
+          scope: ''
+        });
+      };
+      gapi.load('client:auth2', initClient);
+  });
   
   let message = '';
 
@@ -22,11 +35,21 @@ const LoginPage = () => {
 
   const onSubmit = (values, login) => {
     if (values.username === 'user' && values.password === '123') {
-      login();
+      login({name: values.username});
       setRedirectToReferrer(true);
     } else {
       message = 'Username or password is wrong';
     }
+  }
+
+  const respOnSuccessGoogle = (response, login) => {
+    login(response);
+    setRedirectToReferrer(true);
+    message='success'
+  }
+
+  const respOnErrorGoogle = (err) => {
+    message = err;
   }
 
   if(redirectToReferrer){
@@ -52,7 +75,7 @@ const LoginPage = () => {
                               <div>
                                 <Row>
                                   <Col>
-                                    <h2>Login</h2>
+                                    <h2 className='mb-3'>Login</h2>
                                   </Col>
                                 </Row>
                                 <Row>
@@ -77,7 +100,23 @@ const LoginPage = () => {
                                       }
                                   </Col>
                                 </Row>
-                                <p className='mt-2'>{message}</p>
+                                <Row className='my-3'>
+                                  <Col>
+                                    <span>--- OR ---</span>
+                                  </Col>
+                                </Row>
+                                <Row>
+                                  <Col>
+                                    <GoogleLogin
+                                      clientId={clientId}
+                                      buttonText="LOGIN WITH GOOGLE"
+                                      onSuccess={(resp) => respOnSuccessGoogle(resp, login)}
+                                      onFailure={respOnErrorGoogle}
+                                      cookiePolicy={'single_host_origin'}
+                                    />
+                                  </Col>
+                                </Row>
+                                <p className='mt-3 text-danger'>{message}</p>
                               </div>
                             )
                           }

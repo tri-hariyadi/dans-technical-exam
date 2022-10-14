@@ -16,7 +16,7 @@ const SearchForm = ({ onSubmit }) => {
                 <TextField name='desc' placeholder='Search' />
               </Col>
               <Col md='3'>
-                <TextField name='location' placeholder='Nama Kota' />
+                <TextField name='location' placeholder='City' />
               </Col>
               <Col  md='3'>
                 <RadioField
