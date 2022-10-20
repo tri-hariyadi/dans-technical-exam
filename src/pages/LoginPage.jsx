@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Form } from 'react-final-form';
 import { Redirect, useLocation } from 'react-router-dom';
 import { Row, Col, Spinner, Container, Card, CardGroup, CardBody } from 'reactstrap';
@@ -7,8 +7,12 @@ import { gapi } from 'gapi-script';
 import { AuthConsumer } from '../Auth/AuthContext';
 import TextField from '../components/TextField';
 
+let interval;
+let message = '';
 const LoginPage = () => {
   const [redirectToReferrer, setRedirectToReferrer] = useState(false);
+  const [disable, setDisable] = useState(false);
+  const [timer, setTimer] = useState(60);
   const { state }  = useLocation();
   const clientId = '253456688828-p2hqlknlqd08vhei2r1t1o9gr7c8g67m.apps.googleusercontent.com';
 
@@ -21,12 +25,32 @@ const LoginPage = () => {
       };
       gapi.load('client:auth2', initClient);
   });
-  
-  let message = '';
+
+  const decreaseTimer = useCallback(() => {
+    interval = setInterval(() => {
+      setTimer(v => v-1);
+    }, 1000);
+  }, [])
+
+  useEffect(() => {
+    if (disable) {
+      decreaseTimer();
+      setTimeout(() => {
+        setDisable(false);
+      }, 60000);
+    }
+  }, [decreaseTimer, disable])
+
+  useEffect(() => {
+    if (timer === 0) {
+      clearInterval(interval);
+      setTimer(60);
+    }
+  }, [timer])
 
   switch (state?.from.pathname) {
     case '/home':
-      message = 'You must log in to view the jobs';
+      if (!disable) message = 'You must log in to view the jobs';
       break;
   
     default:
@@ -39,6 +63,7 @@ const LoginPage = () => {
       setRedirectToReferrer(true);
     } else {
       message = 'Username or password is wrong';
+      setDisable(true);
     }
   }
 
@@ -51,6 +76,7 @@ const LoginPage = () => {
   const respOnErrorGoogle = (err) => {
     message = err;
   }
+  console.log(message);
 
   if(redirectToReferrer){
     return <Redirect to='/home' />
@@ -91,7 +117,10 @@ const LoginPage = () => {
                                 <Row>
                                   <Col>
                                       {!submitting ?
-                                        <button onClick={handleSubmit} className='btn btn-primary'>Login</button>
+                                        disable ?
+                                          <span className='btn btn-secondary disable'>Login</span>
+                                          :
+                                          <button onClick={handleSubmit} className='btn btn-primary'>Login</button>
                                         :
                                         <div className='btn btn-primary'>
                                           <Spinner color='light' size='sm' className='me-2' />
@@ -105,7 +134,7 @@ const LoginPage = () => {
                                     <span>--- OR ---</span>
                                   </Col>
                                 </Row>
-                                <Row>
+                                <Row className='mb-3'>
                                   <Col>
                                     <GoogleLogin
                                       clientId={clientId}
@@ -116,7 +145,8 @@ const LoginPage = () => {
                                     />
                                   </Col>
                                 </Row>
-                                <p className='mt-3 text-danger'>{message}</p>
+                                <span className='text-danger'>{message}</span>
+                                {disable && <span className='ms-2 text-danger'>{timer}</span>}
                               </div>
                             )
                           }
